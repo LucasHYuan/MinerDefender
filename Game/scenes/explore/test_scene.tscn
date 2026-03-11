@@ -1,0 +1,169 @@
+[gd_scene load_steps=14 format=3 uid="uid://d3yllstdmow4o"]
+
+[ext_resource type="PackedScene" uid="uid://dqplwuanj0qb7" path="res://scenes/explore/tile_map.tscn" id="1_04r47"]
+[ext_resource type="PackedScene" uid="uid://g4ytruh0jt1b" path="res://features/player/Player.tscn" id="1_tvfoe"]
+[ext_resource type="PackedScene" uid="uid://bpn04pgdpl1ai" path="res://ui/input/joy_stick.tscn" id="3_fsps6"]
+[ext_resource type="PackedScene" uid="uid://diit1i7sexrw6" path="res://core/systems/cycle_controller.tscn" id="6_ufvnw"]
+[ext_resource type="PackedScene" uid="uid://8tl7c6epylu4" path="res://features/building/wave_tower_basic.tscn" id="7_8jgbk"]
+[ext_resource type="PackedScene" uid="uid://dqpc7u7apn2h" path="res://features/enemy/enemy_generator.tscn" id="7_afqbx"]
+[ext_resource type="PackedScene" uid="uid://mr2hi4fimewl" path="res://ui/debug/gm_command.tscn" id="8_ccghd"]
+[ext_resource type="PackedScene" uid="uid://doe3ou8ymiafx" path="res://features/building/farm_basic.tscn" id="9_app1a"]
+[ext_resource type="PackedScene" uid="uid://031u5b0jmcbl" path="res://features/building/tower_basic.tscn" id="9_hyy0c"]
+[ext_resource type="PackedScene" uid="uid://bqk4w32ygdjra" path="res://features/building/base_camp.tscn" id="10_p4fai"]
+[ext_resource type="PackedScene" uid="uid://cwjy7r783tqx5" path="res://features/enemy/skull.tscn" id="10_sxf50"]
+[ext_resource type="PackedScene" uid="uid://dla7wqkavxvfq" path="res://features/enemy/octopus.tscn" id="12_u5rkk"]
+
+[sub_resource type="Curve2D" id="Curve2D_oe8ji"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -68, -73, 0, 0, 0, 0, 262, -76, 0, 0, 0, 0, 262, 446, 0, 0, 0, 0, -65, 443, 0, 0, 0, 0, -71, -73)
+}
+point_count = 5
+
+[node name="TestScene" type="Node2D"]
+y_sort_enabled = true
+metadata/_edit_horizontal_guides_ = [-91.0]
+metadata/_edit_vertical_guides_ = [561.0]
+
+[node name="TileMap" parent="." instance=ExtResource("1_04r47")]
+
+[node name="Player" parent="." instance=ExtResource("1_tvfoe")]
+position = Vector2(-248, 653)
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+limit_smoothed = true
+position_smoothing_enabled = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="JoyStick" parent="CanvasLayer" instance=ExtResource("3_fsps6")]
+metadata/_edit_use_anchors_ = true
+
+[node name="CycleController" parent="." instance=ExtResource("6_ufvnw")]
+start_state = 1
+
+[node name="EnemyGenerator" parent="." node_paths=PackedStringArray("enemy_path", "enemy_spawn_location", "cycle_controller") instance=ExtResource("7_afqbx")]
+enemy_path = NodePath("Path2D")
+enemy_spawn_location = NodePath("Path2D/PathFollow2D")
+cycle_controller = NodePath("../CycleController")
+
+[node name="Path2D" type="Path2D" parent="EnemyGenerator"]
+curve = SubResource("Curve2D_oe8ji")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="EnemyGenerator/Path2D"]
+position = Vector2(-68, -73)
+rotation = -0.00909066
+
+[node name="GmCommand" parent="." instance=ExtResource("8_ccghd")]
+
+[node name="Buildings" type="Node2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="BaseCamp" parent="Buildings" instance=ExtResource("10_p4fai")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(113, 184)
+price = 3
+
+[node name="WaveTower" parent="Buildings" node_paths=PackedStringArray("pre_building") instance=ExtResource("7_8jgbk")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(149, 99)
+price = 30
+pre_building = NodePath("../Farms/Farm4")
+
+[node name="Farms" type="Node2D" parent="Buildings"]
+y_sort_enabled = true
+
+[node name="Farm" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(97, 213)
+pre_building = NodePath("../../BaseCamp")
+
+[node name="Farm2" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(129, 214)
+pre_building = NodePath("../Farm")
+
+[node name="Farm3" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(97, 235)
+pre_building = NodePath("../Farm2")
+
+[node name="Farm4" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(129, 235)
+pre_building = NodePath("../Farm3")
+
+[node name="Farm5" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(97, 154)
+pre_building = NodePath("../Farm4")
+
+[node name="Farm6" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(129, 154)
+pre_building = NodePath("../Farm5")
+
+[node name="Farm7" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+position = Vector2(129, 130)
+pre_building = NodePath("../Farm6")
+
+[node name="Farm8" parent="Buildings/Farms" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_app1a")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(97, 130)
+pre_building = NodePath("../Farm7")
+
+[node name="Towers" type="Node2D" parent="Buildings"]
+y_sort_enabled = true
+
+[node name="Tower" parent="Buildings/Towers" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_hyy0c")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(176, 155)
+pre_building = NodePath("../../Farms/Farm2")
+
+[node name="Tower2" parent="Buildings/Towers" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_hyy0c")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(176, 213)
+pre_building = NodePath("../Tower")
+
+[node name="Tower3" parent="Buildings/Towers" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_hyy0c")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(50, 213)
+pre_building = NodePath("../Tower2")
+
+[node name="Tower4" parent="Buildings/Towers" node_paths=PackedStringArray("pre_building") instance=ExtResource("9_hyy0c")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(50, 155)
+pre_building = NodePath("../Tower3")
+
+[node name="DefaultEnemy" type="Node2D" parent="."]
+position = Vector2(-192, 563)
+
+[node name="Skull" parent="DefaultEnemy" instance=ExtResource("10_sxf50")]
+position = Vector2(121, 85)
+is_stay = true
+
+[node name="Skull2" parent="DefaultEnemy" instance=ExtResource("10_sxf50")]
+position = Vector2(135, -83)
+is_stay = true
+
+[node name="Skull3" parent="DefaultEnemy" instance=ExtResource("10_sxf50")]
+position = Vector2(209, -243)
+is_stay = true
+
+[node name="Octupus" parent="DefaultEnemy" instance=ExtResource("12_u5rkk")]
+position = Vector2(-35, 256)
+is_stay = true

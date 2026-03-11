@@ -1,0 +1,393 @@
+[gd_scene format=3 uid="uid://g4ytruh0jt1b"]
+
+[ext_resource type="Script" uid="uid://brmdbfv1qa5pk" path="res://features/player/player.gd" id="1_wadek"]
+[ext_resource type="Texture2D" uid="uid://gdjxdkdd54m7" path="res://assets/brackeys_platformer_assets/sprites/knight.png" id="2_ioptb"]
+[ext_resource type="PackedScene" uid="uid://ynah0rik0eio" path="res://features/battle/battle_unit.tscn" id="4_3t8dl"]
+[ext_resource type="Script" uid="uid://dcs6kgk5eqveo" path="res://shared/classes/state_machine.gd" id="4_df445"]
+[ext_resource type="Script" uid="uid://nw0qdxyld8ou" path="res://features/battle/collision/hurtbox.gd" id="5_6x7l5"]
+[ext_resource type="PackedScene" uid="uid://b0myny5kap7m6" path="res://features/bullet/Bullet.tscn" id="7_13f65"]
+[ext_resource type="PackedScene" uid="uid://dj8s0itikxgfu" path="res://ui/hud/status_panel.tscn" id="7_nb60r"]
+[ext_resource type="Script" uid="uid://cklucy4crlar5" path="res://features/player/player_data.gd" id="9_3p4rv"]
+[ext_resource type="PackedScene" uid="uid://cii72sr21bqp3" path="res://features/battle/skills/invincible_on_hurt.tscn" id="9_rayig"]
+[ext_resource type="Script" uid="uid://clm0v2ix0hpbe" path="res://features/battle/weapon_controller.gd" id="10_weapon"]
+
+[sub_resource type="Animation" id="Animation_fv7hq"]
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Graphics/PlayerSprite:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Graphics/PlayerSprite:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Graphics/PlayerSprite:region_rect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 128, 32)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Graphics/PlayerSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [3]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Hurtbox:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_j56qo"]
+resource_name = "attack"
+
+[sub_resource type="Animation" id="Animation_6tovx"]
+resource_name = "death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Graphics/PlayerSprite:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Graphics/PlayerSprite:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Graphics/PlayerSprite:region_rect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 224, 128, 32)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Graphics/PlayerSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(1),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"die"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_cadkn"]
+resource_name = "hit"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Graphics/PlayerSprite:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Graphics/PlayerSprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 192, 128, 32)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Graphics/PlayerSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Graphics/PlayerSprite:vframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Hurtbox:monitoring")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_1xbpy"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Graphics/PlayerSprite:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 128, 32)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Graphics/PlayerSprite:hframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Graphics/PlayerSprite:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Graphics/PlayerSprite:vframes")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [1]
+}
+
+[sub_resource type="Animation" id="Animation_j1ov4"]
+resource_name = "running"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Graphics/PlayerSprite:hframes")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [8]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Graphics/PlayerSprite:vframes")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [2]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Graphics/PlayerSprite:region_rect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 64, 256, 64)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Graphics/PlayerSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w4cmk"]
+_data = {
+&"RESET": SubResource("Animation_fv7hq"),
+&"attack": SubResource("Animation_j56qo"),
+&"death": SubResource("Animation_6tovx"),
+&"hit": SubResource("Animation_cadkn"),
+&"idle": SubResource("Animation_1xbpy"),
+&"running": SubResource("Animation_j1ov4")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1wlrc"]
+size = Vector2(7.015, 13.47)
+
+[node name="Player" type="CharacterBody2D" unique_id=255294944 groups=["Player_Group"]]
+motion_mode = 1
+script = ExtResource("1_wadek")
+atk = 0.5
+
+[node name="Graphics" type="Node2D" parent="." unique_id=794564142]
+
+[node name="PlayerSprite" type="Sprite2D" parent="Graphics" unique_id=1848429887]
+position = Vector2(0, -11)
+texture = ExtResource("2_ioptb")
+hframes = 4
+frame = 3
+region_enabled = true
+region_rect = Rect2(0, 0, 128, 32)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1858874153]
+libraries/ = SubResource("AnimationLibrary_w4cmk")
+autoplay = &"idle"
+
+[node name="PlayerCollision" type="CollisionShape2D" parent="." unique_id=998296248]
+position = Vector2(0, -2)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_1wlrc")
+debug_color = Color(4.23551e-06, 0.58264, 0.790378, 0.42)
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1174890285]
+position = Vector2(0, -3)
+collision_mask = 0
+script = ExtResource("5_6x7l5")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox" unique_id=1402124808]
+position = Vector2(0, 1)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_1wlrc")
+debug_color = Color(0.844691, 0.279891, 0.648589, 0.42)
+
+[node name="BattleUnit" parent="." unique_id=1897714453 node_paths=PackedStringArray("hurtbox") instance=ExtResource("4_3t8dl")]
+hurtbox = NodePath("../Hurtbox")
+
+[node name="InvincibleOnHurt" parent="BattleUnit" unique_id=400550226 instance=ExtResource("9_rayig")]
+
+[node name="WeaponController" type="Node2D" parent="." unique_id=234089496]
+script = ExtResource("10_weapon")
+projectile_scene = ExtResource("7_13f65")
+
+[node name="ShootPoint" type="Marker2D" parent="WeaponController" unique_id=1613803715]
+position = Vector2(0, -8)
+
+[node name="StateMachine" type="Node" parent="." unique_id=1961748305]
+script = ExtResource("4_df445")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1129907779]
+
+[node name="StatusPanel" parent="CanvasLayer" unique_id=573482447 node_paths=PackedStringArray("battle_unit", "player_data") instance=ExtResource("7_nb60r")]
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 54.0
+offset_bottom = 32.0
+battle_unit = NodePath("../../BattleUnit")
+player_data = NodePath("../../Data")
+
+[node name="Data" type="Node2D" parent="." unique_id=2101792929]
+script = ExtResource("9_3p4rv")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

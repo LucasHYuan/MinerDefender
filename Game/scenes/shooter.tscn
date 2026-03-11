@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://40nqsobwv8oq"]
+
+[ext_resource type="Script" path="res://features/bullet/shooter.gd" id="1_4ph0c"]
+[ext_resource type="Texture2D" uid="uid://demkp4ciyeskq" path="res://assets/normal/round.png" id="2_dqjrj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vu8cn"]
+radius = 80.0
+
+[node name="Shooter" type="Area2D"]
+rotation = 1.5708
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_4ph0c")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="ShootPoint" type="Marker2D" parent="."]
+position = Vector2(0, 2.38419e-07)
+rotation = -1.5708
+scale = Vector2(1, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(1.4, 2)
+shape = SubResource("CircleShape2D_vu8cn")
+debug_color = Color(0.992157, 0, 0, 0.0392157)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.44, 0.629)
+texture = ExtResource("2_dqjrj")

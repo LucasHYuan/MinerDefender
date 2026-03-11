@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://b0myny5kap7m6"]
+
+[ext_resource type="Script" uid="uid://btrerpx5wp2nn" path="res://features/bullet/Bullet.gd" id="1_8o1op"]
+[ext_resource type="Texture2D" uid="uid://c1fly64g4vjxt" path="res://assets/Ninja Adventure - Asset Pack/Items/Food/Calamari.png" id="2_3ygsl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pnmqf"]
+radius = 5.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m0nx6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_3ygsl")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="Bullet" type="Area2D" unique_id=1455524283]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_8o1op")
+atk = 0.5
+
+[node name="HitCollision" type="CollisionShape2D" parent="." unique_id=334050840]
+shape = SubResource("CircleShape2D_pnmqf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=482210099]
+sprite_frames = SubResource("SpriteFrames_m0nx6")
+frame_progress = 0.0652143
+
+[node name="TimerDestroy" type="Timer" parent="." unique_id=684466075]
+wait_time = 20.0

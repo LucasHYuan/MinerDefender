@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://cb1noa13yna06"]
+
+[ext_resource type="Script" path="res://shared/classes/interactable.gd" id="1_db6re"]
+[ext_resource type="Script" path="res://features/building/build_component.gd" id="1_dxdpw"]
+[ext_resource type="Texture2D" uid="uid://ccutmsu8l4nqm" path="res://assets/Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png" id="2_x8r8u"]
+[ext_resource type="Texture2D" uid="uid://de63yru3yg8yu" path="res://assets/brackeys_platformer_assets/sprites/coin.png" id="4_27ske"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3yoiq"]
+radius = 6.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f6wem"]
+atlas = ExtResource("4_27ske")
+region = Rect2(20, 3, 8, 10)
+
+[node name="BuildComponent" type="Node2D"]
+script = ExtResource("1_dxdpw")
+
+[node name="Interactable_area" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_db6re")
+
+[node name="Detector" type="CollisionShape2D" parent="Interactable_area"]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_3yoiq")
+
+[node name="Graphics" type="Node2D" parent="."]
+
+[node name="Icon" type="Sprite2D" parent="Graphics"]
+position = Vector2(0, -8)
+texture = ExtResource("2_x8r8u")
+region_enabled = true
+region_rect = Rect2(496, 288, 16, 16)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = 14.0
+offset_right = 32.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "建筑名称"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Description" type="Label" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "建筑功能"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(48, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 10
+text = "30"
+icon = SubResource("AtlasTexture_f6wem")
+expand_icon = true

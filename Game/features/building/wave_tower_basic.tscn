@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3 uid="uid://8tl7c6epylu4"]
+
+[ext_resource type="Script" path="res://features/building/wave_tower_basic.gd" id="1_mkrcl"]
+[ext_resource type="PackedScene" uid="uid://cb1noa13yna06" path="res://features/building/build_component.tscn" id="2_xqh38"]
+[ext_resource type="Script" path="res://features/player/player_data.gd" id="3_uc3qc"]
+[ext_resource type="Texture2D" uid="uid://ccutmsu8l4nqm" path="res://assets/Ninja Adventure - Asset Pack/Backgrounds/Tilesets/TilesetHouse.png" id="4_ugrp7"]
+[ext_resource type="PackedScene" uid="uid://ynah0rik0eio" path="res://features/battle/battle_unit.tscn" id="5_du00k"]
+[ext_resource type="Script" path="res://features/battle/collision/hurtbox.gd" id="6_cjiq4"]
+[ext_resource type="PackedScene" uid="uid://40nqsobwv8oq" path="res://scenes/shooter.tscn" id="7_syslv"]
+[ext_resource type="PackedScene" uid="uid://c8lj3sjmixder" path="res://features/bullet/wave.tscn" id="8_ptq4l"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c4r3q"]
+size = Vector2(36.59, 21.512)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7nwja"]
+size = Vector2(32, 16)
+
+[node name="WaveTower" type="Node2D"]
+script = ExtResource("1_mkrcl")
+shoot_time = 2.0
+attacker_speed = 1.0
+buildingName = "光波塔"
+descriptionLabel = "发射范围性的光波"
+
+[node name="BuildComponent" parent="." instance=ExtResource("2_xqh38")]
+
+[node name="Stats" type="Node" parent="."]
+script = ExtResource("3_uc3qc")
+
+[node name="BuildShow" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 1, 0.329412)
+position = Vector2(0, -14)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_ugrp7")
+region_enabled = true
+region_rect = Rect2(16, 240, 30.7506, 46.866)
+
+[node name="BattleUnit" parent="." node_paths=PackedStringArray("hurtbox") instance=ExtResource("5_du00k")]
+position = Vector2(0, -24)
+hurtbox = NodePath("../Hurtbox")
+max_health = 3.0
+
+[node name="Hurtbox" type="Area2D" parent="."]
+visible = false
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("6_cjiq4")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_c4r3q")
+debug_color = Color(0.844691, 0.279891, 0.648589, 0.42)
+
+[node name="Building" type="StaticBody2D" parent="."]
+z_as_relative = false
+y_sort_enabled = true
+collision_layer = 3
+collision_mask = 0
+
+[node name="Img" type="Sprite2D" parent="Building"]
+position = Vector2(0, -14)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("4_ugrp7")
+region_enabled = true
+region_rect = Rect2(16, 240, 32, 48)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Building"]
+position = Vector2(-4.76837e-07, -3)
+shape = SubResource("RectangleShape2D_7nwja")
+
+[node name="Shooter" parent="Building" node_paths=PackedStringArray("battle_unit") instance=ExtResource("7_syslv")]
+attacker_scene = ExtResource("8_ptq4l")
+battle_unit = NodePath("../../BattleUnit")
+attacker_speed = 0.25
+attacker_damage = 0.25
+fix = true

@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8lj3sjmixder"]
+
+[ext_resource type="Script" path="res://features/bullet/wave.gd" id="1_eb5pp"]
+[ext_resource type="Texture2D" uid="uid://demkp4ciyeskq" path="res://assets/normal/round.png" id="2_xljtn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8vodi"]
+radius = 5.0
+
+[node name="Taunt_wave" type="Area2D"]
+rotation = 1.5708
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_eb5pp")
+atk = 0.25
+
+[node name="HitCollision" type="CollisionShape2D" parent="."]
+scale = Vector2(22.64, 32.08)
+shape = SubResource("CircleShape2D_8vodi")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.89041, 1.66532e-05, 0.610098, 1)
+scale = Vector2(0.44, 0.629)
+texture = ExtResource("2_xljtn")
+
+[node name="TimerDestroy" type="Timer" parent="."]
+wait_time = 3.5
+
+[connection signal="timeout" from="TimerDestroy" to="." method="_on_timer_destroy_timeout"]

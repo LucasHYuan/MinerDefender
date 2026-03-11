@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpn04pgdpl1ai"]
+
+[ext_resource type="Texture2D" uid="uid://bdrpp4qqy3q1g" path="res://assets/gdb-gamepad-2(all)/gdb-playstation-2.png" id="1_r4t84"]
+[ext_resource type="Script" path="res://ui/input/knob.gd" id="2_gubj0"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d6wmn"]
+atlas = ExtResource("1_r4t84")
+region = Rect2(128, 352, 16, 16)
+
+[node name="JoyStick" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="knob" type="TouchScreenButton" parent="Control"]
+position = Vector2(-8, 120)
+texture_normal = SubResource("AtlasTexture_d6wmn")
+script = ExtResource("2_gubj0")

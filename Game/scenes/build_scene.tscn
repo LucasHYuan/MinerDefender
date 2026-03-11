@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://d3rblimvkt2yl"]
+
+[ext_resource type="PackedScene" uid="uid://g4ytruh0jt1b" path="res://features/player/Player.tscn" id="1_fhn67"]
+[ext_resource type="PackedScene" uid="uid://bpn04pgdpl1ai" path="res://ui/input/joy_stick.tscn" id="2_srr8b"]
+[ext_resource type="PackedScene" uid="uid://bqk4w32ygdjra" path="res://features/building/base_camp.tscn" id="3_hcdp7"]
+[ext_resource type="PackedScene" uid="uid://8tl7c6epylu4" path="res://features/building/wave_tower_basic.tscn" id="4_hts4y"]
+[ext_resource type="PackedScene" uid="uid://doe3ou8ymiafx" path="res://features/building/farm_basic.tscn" id="5_pw0x8"]
+[ext_resource type="PackedScene" uid="uid://031u5b0jmcbl" path="res://features/building/tower_basic.tscn" id="6_m1hws"]
+
+[node name="BuildScene" type="Node2D"]
+z_as_relative = false
+y_sort_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_fhn67")]
+y_sort_enabled = true
+position = Vector2(106, 169)
+
+[node name="JoyStick" parent="." instance=ExtResource("2_srr8b")]
+offset_left = 110.0
+offset_top = 192.0
+offset_right = 110.0
+offset_bottom = 192.0
+
+[node name="BaseCamp" parent="." instance=ExtResource("3_hcdp7")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(80, 125)
+price = 0
+
+[node name="WaveTower" parent="." instance=ExtResource("4_hts4y")]
+position = Vector2(146, 134)
+price = 0
+
+[node name="Farm" parent="." instance=ExtResource("5_pw0x8")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(77, 181)
+price = 0
+
+[node name="Tower" parent="." instance=ExtResource("6_m1hws")]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(137, 189)
+price = 0

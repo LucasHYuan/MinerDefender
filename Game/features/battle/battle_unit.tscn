@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://ynah0rik0eio"]
+
+[ext_resource type="Script" path="res://features/battle/battle_unit.gd" id="1_q4oxl"]
+[ext_resource type="Texture2D" uid="uid://re8da6a82ma2" path="res://assets/Ninja Adventure - Asset Pack/Ui/LifeBarMiniUnder.png" id="2_ve1i6"]
+[ext_resource type="Texture2D" uid="uid://b23sjiwgvyl42" path="res://assets/Ninja Adventure - Asset Pack/Ui/LifeBarMiniProgress.png" id="3_kfpfk"]
+
+[node name="BattleUnit" type="Node2D"]
+script = ExtResource("1_q4oxl")
+
+[node name="HealthBar" type="TextureProgressBar" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -10.0
+offset_right = 9.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 0.5
+texture_under = ExtResource("2_ve1i6")
+texture_progress = ExtResource("3_kfpfk")

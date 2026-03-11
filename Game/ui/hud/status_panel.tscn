@@ -1,0 +1,92 @@
+[gd_scene load_steps=12 format=3 uid="uid://dj8s0itikxgfu"]
+
+[ext_resource type="Texture2D" uid="uid://c0ufdm3ld2uxn" path="res://assets/Ninja Adventure - Asset Pack/Ui/Dialog/FacesetBox.png" id="1_3yvnm"]
+[ext_resource type="Script" path="res://ui/hud/status_panel.gd" id="1_my3e4"]
+[ext_resource type="Texture2D" uid="uid://gdjxdkdd54m7" path="res://assets/brackeys_platformer_assets/sprites/knight.png" id="2_dia7s"]
+[ext_resource type="Texture2D" uid="uid://re8da6a82ma2" path="res://assets/Ninja Adventure - Asset Pack/Ui/LifeBarMiniUnder.png" id="3_2f34y"]
+[ext_resource type="Texture2D" uid="uid://b23sjiwgvyl42" path="res://assets/Ninja Adventure - Asset Pack/Ui/LifeBarMiniProgress.png" id="4_gd166"]
+[ext_resource type="Texture2D" uid="uid://de63yru3yg8yu" path="res://assets/brackeys_platformer_assets/sprites/coin.png" id="6_ctapv"]
+[ext_resource type="FontFile" uid="uid://cr1tf4asbkgsh" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8.ttf" id="7_d6667"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_v5nw4"]
+font = ExtResource("7_d6667")
+font_size = 8
+outline_size = 1
+shadow_size = 5
+shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wccku"]
+content_margin_left = 3.0
+content_margin_top = 3.0
+content_margin_right = 3.0
+content_margin_bottom = 3.0
+texture = ExtResource("1_3yvnm")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81khw"]
+atlas = ExtResource("2_dia7s")
+region = Rect2(9, 9, 13, 13)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a3oof"]
+atlas = ExtResource("6_ctapv")
+region = Rect2(20, 3, 8, 10)
+
+[node name="StatusPanel" type="HBoxContainer"]
+offset_left = 8.0
+offset_top = 7.0
+offset_right = 68.0
+offset_bottom = 33.0
+script = ExtResource("1_my3e4")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="level_text" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+label_settings = SubResource("LabelSettings_v5nw4")
+
+[node name="AvatarBox" type="PanelContainer" parent="VBoxContainer"]
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_wccku")
+
+[node name="Avatar" type="TextureRect" parent="VBoxContainer/AvatarBox"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_81khw")
+stretch_mode = 5
+
+[node name="Health_and_Exp" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="HealthBar" type="TextureProgressBar" parent="Health_and_Exp"]
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.0
+value = 0.5
+texture_under = ExtResource("3_2f34y")
+texture_progress = ExtResource("4_gd166")
+
+[node name="ExpBar" type="TextureProgressBar" parent="Health_and_Exp"]
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+value = 0.5
+texture_under = ExtResource("3_2f34y")
+texture_progress = ExtResource("4_gd166")
+tint_progress = Color(0, 1, 0.352941, 1)
+
+[node name="coin" type="TextureRect" parent="."]
+custom_minimum_size = Vector2(8, 10)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = SubResource("AtlasTexture_a3oof")
+
+[node name="coin_text" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+label_settings = SubResource("LabelSettings_v5nw4")

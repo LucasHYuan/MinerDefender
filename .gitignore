@@ -1,0 +1,46 @@
+# ---- Godot 4 project caches ----
+# Per-user/editor cache, safe to regenerate
+Game/.godot/
+Game/.mono/
+Game/.import/
+
+# Export / build output (add your export dirs here if needed)
+Game/export/
+Game/build/
+
+
+# ---- Editor / IDE configs ----
+.vscode/
+.idea/
+.vs/
+.history/
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+
+# ---- Cursor local state ----
+# Ignore all Cursor state by default...
+.cursor/*
+
+# ...but keep shared architecture/rule docs
+!.cursor/rules/
+!.cursor/rules/*.md
+
+# If you ever want plans tracked, comment this out
+.cursor/plans/
+
+
+# ---- Logs / temp files ----
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+
+# ---- Python / tooling cache (if you add scripts later) ----
+__pycache__/
+*.pyc
+

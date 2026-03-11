@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://console_scene"]
+
+[ext_resource type="Script" path="res://ui/debug/console.gd" id="1_abcdef"]
+
+[node name="Console" type="CanvasLayer"]
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="LogView" type="RichTextLabel" parent="Root"]
+layout_mode = 3
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.8
+bbcode_enabled = true
+scroll_active = true
+scroll_following = true
+
+[node name="CommandInput" type="LineEdit" parent="Root"]
+layout_mode = 3
+anchor_left = 0.0
+anchor_top = 0.8
+anchor_right = 1.0
+anchor_bottom = 1.0
+placeholder_text = "Enter debug command..."
+

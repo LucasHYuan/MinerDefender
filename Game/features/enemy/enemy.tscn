@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://bbtrppnn3mx5t"]
+
+[ext_resource type="Script" uid="uid://dkehqok2jnpp4" path="res://features/enemy/enemy.gd" id="1_6grxu"]
+[ext_resource type="Script" uid="uid://p24tpauyh0fm" path="res://features/enemy/battle_search.gd" id="4_g75lv"]
+[ext_resource type="PackedScene" uid="uid://ynah0rik0eio" path="res://features/battle/battle_unit.tscn" id="4_gtygu"]
+[ext_resource type="Texture2D" uid="uid://demkp4ciyeskq" path="res://assets/normal/round.png" id="5_3xnve"]
+[ext_resource type="Script" uid="uid://nw0qdxyld8ou" path="res://features/battle/collision/hurtbox.gd" id="5_p1u8q"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_tvbjf"]
+animation = &"left"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_w0bnl"]
+animation = &"right"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nq67e"]
+animation = &"up"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_30lmq"]
+animation = &"down"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id="AnimationNodeBlendSpace2D_tdabr"]
+blend_point_0/node = SubResource("AnimationNodeAnimation_tvbjf")
+blend_point_0/pos = Vector2(-1, 0)
+blend_point_1/node = SubResource("AnimationNodeAnimation_w0bnl")
+blend_point_1/pos = Vector2(1, 0)
+blend_point_2/node = SubResource("AnimationNodeAnimation_nq67e")
+blend_point_2/pos = Vector2(0, -1)
+blend_point_3/node = SubResource("AnimationNodeAnimation_30lmq")
+blend_point_3/pos = Vector2(0, 1)
+blend_mode = 1
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jadyv"]
+animation = &"death"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_hd4ro"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_37fg1"]
+advance_mode = 2
+advance_condition = &"dead"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_3eqny"]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_eratb"]
+states/Run/node = SubResource("AnimationNodeBlendSpace2D_tdabr")
+states/Run/position = Vector2(442.5, 99.5)
+states/Start/position = Vector2(228, 92.5)
+states/death/node = SubResource("AnimationNodeAnimation_jadyv")
+states/death/position = Vector2(672, 99.7227)
+transitions = ["Start", "Run", SubResource("AnimationNodeStateMachineTransition_hd4ro"), "Run", "death", SubResource("AnimationNodeStateMachineTransition_37fg1"), "death", "End", SubResource("AnimationNodeStateMachineTransition_3eqny")]
+graph_offset = Vector2(-60.7766, -104)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_65eks"]
+radius = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_swir2"]
+radius = 20.0
+
+[node name="Ememy" type="CharacterBody2D" unique_id=1959410681]
+collision_layer = 2
+collision_mask = 2
+motion_mode = 1
+script = ExtResource("1_6grxu")
+
+[node name="Graphics" type="Node2D" parent="." unique_id=1940057163]
+
+[node name="Sprite2D" type="Sprite2D" parent="Graphics" unique_id=696617121]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1117803998]
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=552709267]
+tree_root = SubResource("AnimationNodeStateMachine_eratb")
+anim_player = NodePath("../AnimationPlayer")
+parameters/conditions/dead = false
+parameters/Run/blend_position = Vector2(0.00985217, -0.986541)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1338369562]
+
+[node name="BattleUnit" parent="." unique_id=302155710 node_paths=PackedStringArray("hurtbox") instance=ExtResource("4_gtygu")]
+hurtbox = NodePath("../Hurtbox")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1668152680]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("5_p1u8q")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox" unique_id=1838673687]
+rotation = 1.5708
+shape = SubResource("CircleShape2D_65eks")
+debug_color = Color(0.844691, 0.279891, 0.648589, 0.42)
+
+[node name="BattleSearch" type="Area2D" parent="." unique_id=1091879840]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("4_g75lv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BattleSearch" unique_id=1362510503]
+scale = Vector2(2, 1)
+shape = SubResource("CircleShape2D_swir2")
+
+[node name="RangeSprite" type="Sprite2D" parent="BattleSearch" unique_id=1408259746]
+visible = false
+position = Vector2(0.5, 9.53674e-07)
+scale = Vector2(0.154297, 0.078125)
+texture = ExtResource("5_3xnve")

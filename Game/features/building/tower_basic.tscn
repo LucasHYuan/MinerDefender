@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://031u5b0jmcbl"]
+
+[ext_resource type="PackedScene" uid="uid://m3mx4wyq1waq" path="res://features/building/buildings.tscn" id="1_3pqih"]
+[ext_resource type="Script" path="res://features/building/tower_basic.gd" id="2_ngooe"]
+[ext_resource type="PackedScene" uid="uid://40nqsobwv8oq" path="res://scenes/shooter.tscn" id="3_xwn3r"]
+[ext_resource type="PackedScene" uid="uid://b0myny5kap7m6" path="res://features/bullet/Bullet.tscn" id="4_p3bir"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f0xum"]
+size = Vector2(36.59, 24.377)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y5sw2"]
+size = Vector2(27.51, 14.755)
+
+[node name="Tower" instance=ExtResource("1_3pqih")]
+script = ExtResource("2_ngooe")
+shoot_time = 1.0
+attacker_speed = 200.0
+atk = 1.0
+buildingName = "箭塔"
+descriptionLabel = "不断攻击范围内的敌人"
+price = 16
+
+[node name="BuildShow" parent="." index="2"]
+position = Vector2(0, -16)
+scale = Vector2(0.6, 0.6)
+region_rect = Rect2(256, 96, 48, 80)
+
+[node name="BattleUnit" parent="." index="3"]
+position = Vector2(0, -40)
+max_health = 20.0
+
+[node name="HurtCollision" parent="Hurtbox" index="0"]
+position = Vector2(0, -5)
+shape = SubResource("RectangleShape2D_f0xum")
+
+[node name="Building" parent="." index="5"]
+visible = true
+y_sort_enabled = false
+
+[node name="Img" parent="Building" index="0"]
+z_as_relative = false
+y_sort_enabled = true
+position = Vector2(0, -16)
+scale = Vector2(0.6, 0.6)
+region_rect = Rect2(256, 96, 48, 80)
+
+[node name="CollisionShape2D" parent="Building" index="1"]
+position = Vector2(0, 0)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_y5sw2")
+
+[node name="Shooter" parent="Building" index="2" node_paths=PackedStringArray("battle_unit") instance=ExtResource("3_xwn3r")]
+scale = Vector2(1.5, 1.5)
+attacker_scene = ExtResource("4_p3bir")
+battle_unit = NodePath("../../BattleUnit")

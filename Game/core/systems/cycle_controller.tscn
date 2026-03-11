@@ -1,0 +1,63 @@
+[gd_scene load_steps=6 format=3 uid="uid://diit1i7sexrw6"]
+
+[ext_resource type="Script" path="res://core/systems/cycle_controller.gd" id="1_uyxye"]
+[ext_resource type="FontFile" uid="uid://cfy3sf2ma8mr2" path="res://assets/brackeys_platformer_assets/fonts/PixelOperator8-Bold.ttf" id="2_myk6j"]
+
+[sub_resource type="Animation" id="Animation_pbevs"]
+resource_name = "transition"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DayNightModulate:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(),
+"transitions": PackedFloat32Array(),
+"update": 0,
+"values": []
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_tnn0b"]
+_data = {
+"transition": SubResource("Animation_pbevs")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_m6c6d"]
+font = ExtResource("2_myk6j")
+font_size = 12
+outline_color = Color(0.681228, 0.000395346, 0.692124, 1)
+shadow_size = 3
+shadow_color = Color(0, 0, 0, 1)
+
+[node name="CycleController" type="Node2D"]
+script = ExtResource("1_uyxye")
+
+[node name="DayNightModulate" type="CanvasModulate" parent="."]
+
+[node name="StateTimer" type="Timer" parent="."]
+
+[node name="OneSecondTimer" type="Timer" parent="."]
+
+[node name="CountDownTimer" type="Timer" parent="."]
+
+[node name="TransitionTimer" type="Timer" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_tnn0b")
+}
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Countdown" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -9.0
+offset_top = 45.0
+offset_right = 31.0
+offset_bottom = 68.0
+grow_horizontal = 2
+text = "80"
+label_settings = SubResource("LabelSettings_m6c6d")

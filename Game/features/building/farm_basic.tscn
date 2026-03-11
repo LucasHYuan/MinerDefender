@@ -1,0 +1,125 @@
+[gd_scene load_steps=8 format=3 uid="uid://doe3ou8ymiafx"]
+
+[ext_resource type="PackedScene" uid="uid://m3mx4wyq1waq" path="res://features/building/buildings.tscn" id="1_y0obe"]
+[ext_resource type="Script" path="res://features/building/farm_basic.gd" id="2_c5ajv"]
+[ext_resource type="Script" path="res://shared/classes/up_move_label.gd" id="3_vn15j"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gx1er"]
+size = Vector2(14.205, 7.975)
+
+[sub_resource type="Animation" id="Animation_75m7t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-18, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_bsmbp"]
+resource_name = "UpMovingLabel"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Label:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.937548, 0.837707, 3.85046e-07, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Label:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(-18, 0), Vector2(-18, -20)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_l72u5"]
+_data = {
+"RESET": SubResource("Animation_75m7t"),
+"UpMovingLabel": SubResource("Animation_bsmbp")
+}
+
+[node name="Farm" instance=ExtResource("1_y0obe")]
+script = ExtResource("2_c5ajv")
+coin_earn = 1
+earn_interval = 2
+buildingName = "鱼牧场"
+descriptionLabel = "鱼生鱼，每2秒获得1块钱"
+price = 6
+
+[node name="BuildComponent" parent="." index="0"]
+position = Vector2(-1, 13)
+
+[node name="BuildShow" parent="." index="2"]
+region_rect = Rect2(256, 208, 16, 16)
+
+[node name="BattleUnit" parent="." index="3"]
+position = Vector2(0, -6)
+max_health = 5.0
+
+[node name="HurtCollision" parent="Hurtbox" index="0"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_gx1er")
+
+[node name="Img" parent="Building" index="0"]
+region_rect = Rect2(256, 208, 16, 16)
+
+[node name="CollisionShape2D" parent="Building" index="1"]
+position = Vector2(0, 2)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_gx1er")
+
+[node name="UpMoveLabel" type="Node2D" parent="." index="6"]
+position = Vector2(-1, -37)
+script = ExtResource("3_vn15j")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="UpMoveLabel" index="0"]
+libraries = {
+"": SubResource("AnimationLibrary_l72u5")
+}
+
+[node name="Label" type="Label" parent="UpMoveLabel" index="1"]
+z_index = 50
+z_as_relative = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -18.0
+offset_right = 22.0
+offset_bottom = 23.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 12
+text = "+1"
+horizontal_alignment = 1
+vertical_alignment = 1
