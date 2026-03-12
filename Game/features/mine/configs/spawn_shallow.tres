@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="MineSpawnRule" format=3 uid="uid://dfyja0gs558ew"]
+
+[ext_resource type="Script" uid="uid://doeb4b4uk6uyk" path="res://features/mine/mine_spawn_rule.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://features/mine/MineEnemy.tscn" id="2_enemy"]
+
+[resource]
+script = ExtResource("1_script")
+enemy_scene = ExtResource("2_enemy")
+spawn_interval = 3.0
+max_alive = 2

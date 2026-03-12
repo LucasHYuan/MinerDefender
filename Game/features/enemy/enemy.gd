@@ -47,8 +47,7 @@ func _ready() -> void:
 	init_stats()
 	game_connect()
 	if not is_stay:
-		DEFAULT_TARGET = GlobalObjects.GetObject("base_camp")
-	# DEFAULT_TARGET = GlobalObjects.GetObject("player")
+		DEFAULT_TARGET = GlobalObjects.GetObjectOrNull("base_camp")
 
 #region 属性管理
 func init_stats() -> void:

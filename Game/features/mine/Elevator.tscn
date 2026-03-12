@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://features/mine/elevator.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(64, 8)
+
+[node name="Elevator" type="StaticBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.5, 0.5, 0.6, 1)
+polygon = PackedVector2Array(-32, -4, 32, -4, 32, 4, -32, 4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -32.0
+offset_top = -20.0
+offset_right = 32.0
+offset_bottom = -6.0
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "ELEVATOR"
