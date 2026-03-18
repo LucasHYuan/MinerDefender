@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://b0qv8nltbpgoi"]
+
+[ext_resource type="Script" uid="uid://e0u31lkayeds" path="res://scenes/mine/mine_mode2.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://features/mine/ShieldMachine.tscn" id="2_machine"]
+[ext_resource type="Script" uid="uid://dw4dn08wr00uf" path="res://features/mine/mine_level.gd" id="3_level"]
+[ext_resource type="PackedScene" path="res://features/mine/MiningBlock.tscn" id="4_block"]
+[ext_resource type="Resource" path="res://features/mine/configs/dirt.tres" id="5_dirt"]
+[ext_resource type="Resource" path="res://features/mine/configs/iron_ore.tres" id="6_iron"]
+[ext_resource type="Resource" path="res://features/mine/configs/gold_ore.tres" id="7_gold"]
+[ext_resource type="Script" uid="uid://b8e7hs38wd8wj" path="res://features/mine/mine_monster_spawner.gd" id="8_spawner"]
+[ext_resource type="Script" uid="uid://doeb4b4uk6uyk" path="res://features/mine/mine_spawn_rule.gd" id="9_rule_script"]
+[ext_resource type="Resource" uid="uid://dfyja0gs558ew" path="res://features/mine/configs/spawn_shallow.tres" id="10_spawn_shallow"]
+[ext_resource type="Resource" uid="uid://cshw6msq035y0" path="res://features/mine/configs/spawn_deep.tres" id="11_spawn_deep"]
+[ext_resource type="Script" uid="uid://jndc4ldm8j7g" path="res://features/mine/components/drill_head.gd" id="12_drill"]
+[ext_resource type="Script" uid="uid://c47ev65pt54fr" path="res://features/mine/components/descent_controller.gd" id="13_descent"]
+[ext_resource type="Script" uid="uid://cywhn77gvkko8" path="res://features/mine/components/pinball_launcher.gd" id="14_launcher"]
+[ext_resource type="PackedScene" path="res://features/mine/Pinball.tscn" id="15_pinball"]
+
+[node name="MineMode2" type="Node2D" unique_id=618674567]
+script = ExtResource("1_script")
+
+[node name="ShieldMachine" parent="." unique_id=702081006 instance=ExtResource("2_machine")]
+position = Vector2(320, -16)
+
+[node name="DrillHead" type="Node" parent="ShieldMachine" unique_id=1559220977]
+script = ExtResource("12_drill")
+drill_interval = 1.5
+mine_level_path = NodePath("../../MineLevel")
+
+[node name="DescentController" type="Node" parent="ShieldMachine" unique_id=1321223715]
+script = ExtResource("13_descent")
+
+[node name="PinballLauncher" type="Node2D" parent="ShieldMachine" unique_id=2041449455]
+position = Vector2(0, -8)
+script = ExtResource("14_launcher")
+projectile_scene = ExtResource("15_pinball")
+fire_interval = 2.5
+launch_speed = 250.0
+
+[node name="Camera2D" type="Camera2D" parent="ShieldMachine" unique_id=1076833376]
+position = Vector2(0, -60)
+
+[node name="MineLevel" type="Node2D" parent="." unique_id=160680717]
+script = ExtResource("3_level")
+grid_depth = 40
+dirt_config = ExtResource("5_dirt")
+iron_config = ExtResource("6_iron")
+gold_config = ExtResource("7_gold")
+block_scene = ExtResource("4_block")
+
+[node name="EnemyContainer" type="Node2D" parent="." unique_id=1351347895]
+
+[node name="MineMonsterSpawner" type="Node" parent="." unique_id=1036326631]
+script = ExtResource("8_spawner")
+spawn_rules = Array[ExtResource("9_rule_script")]([ExtResource("10_spawn_shallow"), ExtResource("11_spawn_deep")])
+spawn_container_path = NodePath("../EnemyContainer")
+target_path = NodePath("../ShieldMachine")
+mine_level_path = NodePath("../MineLevel")

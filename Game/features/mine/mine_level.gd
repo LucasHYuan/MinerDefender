@@ -23,10 +23,14 @@ var shaft_depth: int = -1
 
 signal block_destroyed(col: int, row: int, ore_type: StringName, ore_amount: int)
 
+@export_group("Pathfinding")
+@export var path_rows_above: int = 5
+
 var _grid: Dictionary = {}
 var deepest_cleared_row: int = 0
 
 var _block_container: Node2D
+var _astar: AStar2D
 
 
 func _ready() -> void:
@@ -48,6 +52,7 @@ func generate() -> void:
 				continue
 			var cfg := _pick_config(row)
 			_spawn_block(col, row, cfg)
+	_rebuild_astar()
 	AppLogger.info(LOG_MODULE, "Generated %dx%d mine grid (%d blocks, shaft=%s depth=%d)" % [grid_width, grid_depth, _grid.size(), str(shaft_columns), shaft_depth])
 
 
@@ -92,6 +97,7 @@ func _spawn_block(col: int, row: int, cfg: BlockConfig) -> void:
 
 func _on_block_broken(ore_type: StringName, ore_amount: int, col: int, row: int) -> void:
 	_grid.erase(Vector2i(col, row))
+	_astar_add_cell(col, row)
 	block_destroyed.emit(col, row, ore_type, ore_amount)
 	if row > deepest_cleared_row:
 		deepest_cleared_row = row
@@ -124,3 +130,75 @@ func get_grid_pixel_depth() -> float:
 
 func is_cell_empty(col: int, row: int) -> bool:
 	return not _grid.has(Vector2i(col, row))
+
+
+# --- AStar2D Pathfinding ---
+
+func _cell_id(col: int, row: int) -> int:
+	return (row + path_rows_above) * grid_width + col
+
+
+func _is_cell_traversable(col: int, row: int) -> bool:
+	if row < 0:
+		return true
+	return is_cell_empty(col, row)
+
+
+func _rebuild_astar() -> void:
+	_astar = AStar2D.new()
+	var min_row := -path_rows_above
+	for row in range(min_row, grid_depth):
+		for col in range(grid_width):
+			if not _is_cell_traversable(col, row):
+				continue
+			var id := _cell_id(col, row)
+			var world_pos := Vector2(col * CELL_SIZE, row * CELL_SIZE)
+			_astar.add_point(id, world_pos)
+
+	for row in range(min_row, grid_depth):
+		for col in range(grid_width):
+			if not _is_cell_traversable(col, row):
+				continue
+			var id := _cell_id(col, row)
+			_connect_neighbor(id, col + 1, row)
+			_connect_neighbor(id, col, row + 1)
+
+
+func _connect_neighbor(from_id: int, to_col: int, to_row: int) -> void:
+	if to_col < 0 or to_col >= grid_width:
+		return
+	if to_row < -path_rows_above or to_row >= grid_depth:
+		return
+	if not _is_cell_traversable(to_col, to_row):
+		return
+	var to_id := _cell_id(to_col, to_row)
+	if _astar.has_point(from_id) and _astar.has_point(to_id):
+		if not _astar.are_points_connected(from_id, to_id):
+			_astar.connect_points(from_id, to_id)
+
+
+func _astar_add_cell(col: int, row: int) -> void:
+	if _astar == null:
+		return
+	var id := _cell_id(col, row)
+	if _astar.has_point(id):
+		return
+	_astar.add_point(id, Vector2(col * CELL_SIZE, row * CELL_SIZE))
+	_connect_neighbor(id, col - 1, row)
+	_connect_neighbor(id, col + 1, row)
+	_connect_neighbor(id, col, row - 1)
+	_connect_neighbor(id, col, row + 1)
+
+
+func find_path_world(from: Vector2, to: Vector2) -> PackedVector2Array:
+	if _astar == null or _astar.get_point_count() == 0:
+		return PackedVector2Array()
+	var from_id := _astar.get_closest_point(from - global_position)
+	var to_id := _astar.get_closest_point(to - global_position)
+	if from_id == to_id:
+		return PackedVector2Array([to])
+	var local_path := _astar.get_point_path(from_id, to_id)
+	var world_path := PackedVector2Array()
+	for p in local_path:
+		world_path.append(p + global_position)
+	return world_path

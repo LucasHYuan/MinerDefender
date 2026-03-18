@@ -6,22 +6,21 @@ const CELL_SIZE := 32
 
 @export var spawn_rules: Array[MineSpawnRule] = []
 @export var spawn_container_path: NodePath
-@export var miner_path: NodePath
+@export var target_path: NodePath
 @export var mine_level_path: NodePath
 
 @export_group("Spawn Area")
-@export var spawn_margin_x: float = 120.0
-@export var spawn_margin_y: float = 32.0
+@export var spawn_margin_y: float = 64.0
 
 var _timers: Array[Timer] = []
 var _alive_counts: Array[int] = []
-var _miner: Node2D
+var _target: Node2D
 var _container: Node2D
 var _mine_level: MineLevel
 
 
 func _ready() -> void:
-	_miner = get_node_or_null(miner_path)
+	_target = get_node_or_null(target_path)
 	_mine_level = get_node_or_null(mine_level_path) as MineLevel
 	_container = get_node_or_null(spawn_container_path) as Node2D
 	if _container == null:
@@ -39,28 +38,30 @@ func _ready() -> void:
 		_timers.append(timer)
 		timer.start()
 
+	AppLogger.info(LOG_MODULE, "Spawner ready: %d rules, target=%s" % [spawn_rules.size(), str(_target)])
 
-func _get_miner_row() -> int:
-	if _miner == null:
+
+func _get_target_row() -> int:
+	if _target == null:
 		return -999
-	var miner_y := _miner.global_position.y
+	var target_y := _target.global_position.y
 	if _mine_level != null:
-		miner_y -= _mine_level.global_position.y
-	return int(miner_y / CELL_SIZE)
+		target_y -= _mine_level.global_position.y
+	return int(target_y / CELL_SIZE)
 
 
 func _on_spawn_timer(rule_index: int) -> void:
-	if _miner == null:
-		AppLogger.warn(LOG_MODULE, "Spawn timer[%d] fired but _miner is null" % rule_index)
+	if _target == null:
+		AppLogger.warn(LOG_MODULE, "Spawn timer[%d] fired but target is null" % rule_index)
 		return
 	var rule := spawn_rules[rule_index]
 
-	var miner_row := _get_miner_row()
-	AppLogger.info(LOG_MODULE, "Timer[%d] check: miner_row=%d, rule=[%d,%d], alive=%d/%d" % [
-		rule_index, miner_row, rule.min_depth_row, rule.max_depth_row,
+	var target_row := _get_target_row()
+	AppLogger.info(LOG_MODULE, "Timer[%d] check: target_row=%d, rule=[%d,%d], alive=%d/%d" % [
+		rule_index, target_row, rule.min_depth_row, rule.max_depth_row,
 		_alive_counts[rule_index], rule.max_alive])
 
-	if miner_row < rule.min_depth_row or miner_row > rule.max_depth_row:
+	if target_row < rule.min_depth_row or target_row > rule.max_depth_row:
 		return
 	if _alive_counts[rule_index] >= rule.max_alive:
 		return
@@ -74,34 +75,44 @@ func _spawn_enemy(rule_index: int) -> void:
 		return
 
 	var enemy := rule.enemy_scene.instantiate()
-	var pos := _get_offscreen_position()
+	var pos := _get_spawn_position_above()
 	enemy.position = pos
 
 	if "is_stay" in enemy:
 		enemy.is_stay = true
+	if "move_mode" in enemy:
+		enemy.move_mode = MineEnemy.MoveMode.FLY_PATHFIND
 
 	_container.add_child(enemy)
 	_alive_counts[rule_index] += 1
 
-	# Inject Miner as fallback target so the enemy always chases it
 	if "DEFAULT_TARGET" in enemy:
-		enemy.DEFAULT_TARGET = _miner
+		enemy.DEFAULT_TARGET = _target
 
 	if enemy.has_signal("enemy_death"):
 		enemy.enemy_death.connect(_on_enemy_died.bind(rule_index))
 
-	AppLogger.info(LOG_MODULE, "Spawned mine enemy at (%.0f, %.0f) for rule %d (miner row=%d)" % [pos.x, pos.y, rule_index, _get_miner_row()])
+	AppLogger.info(LOG_MODULE, "Spawned enemy at (%.0f, %.0f) rule %d" % [pos.x, pos.y, rule_index])
 
 
 func _on_enemy_died(_enemy: Node, rule_index: int) -> void:
 	_alive_counts[rule_index] = maxi(0, _alive_counts[rule_index] - 1)
 
 
-func _get_offscreen_position() -> Vector2:
-	if _miner == null:
+func _get_spawn_position_above() -> Vector2:
+	if _target == null:
 		return Vector2.ZERO
-	var side := 1.0 if randf() > 0.5 else -1.0
-	var offset_x := spawn_margin_x * side + randf_range(-32, 32)
-	# Keep Y near Miner level; gravity will pull the enemy down to the nearest floor
-	var offset_y := randf_range(-spawn_margin_y, 0.0)
-	return _miner.global_position + Vector2(offset_x, offset_y)
+	var grid_width_px := 640.0
+	if _mine_level != null:
+		grid_width_px = _mine_level.get_grid_pixel_width()
+	var x := randf_range(0.0, grid_width_px)
+	if _mine_level != null:
+		x += _mine_level.global_position.x
+
+	var ref_y: float
+	if _mine_level != null:
+		ref_y = _mine_level.global_position.y - CELL_SIZE
+	else:
+		ref_y = _target.global_position.y
+	var y := ref_y - spawn_margin_y - randf_range(0.0, 32.0)
+	return Vector2(x, y)

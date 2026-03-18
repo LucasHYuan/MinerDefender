@@ -52,23 +52,12 @@ func _spawn_projectile(dir: Vector2) -> void:
 	if projectile_scene == null:
 		return
 
-	var proj := projectile_scene.instantiate()
-	var origin := get_shoot_origin()
-	if "position" in proj:
-		proj.position = origin
+	var config := {
+		"speed": base_speed,
+		"atk": base_damage,
+		"instigator": owner,
+	}
+	if owner != null and "team" in owner:
+		config["team"] = owner.team
 
-	# Try to propagate team and stats when supported by the projectile.
-	if proj.has_method("set_team"):
-		if owner != null and owner.has_method("team"):
-			proj.set_team(owner.team)
-
-	if "instigator" in proj:
-		proj.instigator = owner
-	if "dir" in proj:
-		proj.dir = dir
-	if "speed" in proj:
-		proj.speed = base_speed
-	if "atk" in proj:
-		proj.atk = base_damage
-
-	get_tree().root.add_child(proj)
+	ProjectileUtil.spawn(projectile_scene, get_tree(), get_shoot_origin(), dir, config)

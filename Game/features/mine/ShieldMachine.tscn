@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://features/mine/shield_machine.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ynah0rik0eio" path="res://features/battle/battle_unit.tscn" id="2_battle_unit"]
+[ext_resource type="Script" uid="uid://nw0qdxyld8ou" path="res://features/battle/collision/hurtbox.gd" id="3_hurtbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat"]
+size = Vector2(96, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurt"]
+size = Vector2(96, 12)
+
+[node name="ShieldMachine" type="StaticBody2D"]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_script")
+
+[node name="Visual" type="Polygon2D" parent="."]
+color = Color(0.3, 0.35, 0.5, 1)
+polygon = PackedVector2Array(-48, -6, 48, -6, 48, 6, -48, 6)
+
+[node name="DrillVisual" type="Polygon2D" parent="."]
+color = Color(0.6, 0.4, 0.2, 1)
+polygon = PackedVector2Array(-24, 6, 24, 6, 16, 14, -16, 14)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_plat")
+
+[node name="Label" type="Label" parent="."]
+offset_left = -48.0
+offset_top = -22.0
+offset_right = 48.0
+offset_bottom = -8.0
+horizontal_alignment = 1
+vertical_alignment = 1
+text = "SHIELD MACHINE"
+
+[node name="BattleUnit" parent="." node_paths=PackedStringArray("hurtbox") instance=ExtResource("2_battle_unit")]
+position = Vector2(0, -14)
+hurtbox = NodePath("../Hurtbox")
+max_health = 20.0
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("3_hurtbox")
+
+[node name="HurtCollision" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_hurt")
